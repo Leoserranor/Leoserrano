@@ -1,0 +1,106 @@
+/* APS de microprocessador e microcontrolador
+  		
+        controlando o motor DC
+
+============================================================*/
+
+// definindo  as variaveis globais 
+enum{desligado, pulsar, velocidadeBaixa, velocidadeAlta};
+int current = desligado; // estado atual do motor
+
+// definindo as entradas e saidas digitais
+void setup(){
+  pinMode(9, OUTPUT);
+  pinMode(5, INPUT_PULLUP); //pulsar
+  pinMode(6, INPUT_PULLUP); //velocidadeBaixa
+  pinMode(7, INPUT_PULLUP); //velocidadeAlta
+  pinMode(8, INPUT_PULLUP); //desligado
+  Serial.begin(9600); // ativando o Monitor Serial 
+} // end void setup()
+
+//=========================================================
+// definindo o tipo de acionamento 
+void loop(){
+  
+  // definindo por switch case o estado do motor
+  switch(current){
+
+//==========================================================  
+    // estado desligado
+    
+    case desligado:
+    analogWrite(9, 0);    
+    Serial.println("desligado");
+    if(digitalRead(5)==0)
+       current = pulsar;
+    if(digitalRead(6)==0)
+       current = velocidadeBaixa;
+    if(digitalRead(7)==0)
+       current = velocidadeAlta;
+    break;  
+    
+//=======================================================    
+   // estado pulsativo em 100% e 0% por 1 segundos
+    
+    case pulsar:
+    
+    Serial.println("Pulsar");
+    
+    	analogWrite(9, 255);
+     		 if(digitalRead(8)==0)
+      		 	current = desligado;
+    		if(digitalRead(6)==0)
+       			current = velocidadeBaixa;
+    		if(digitalRead(7)==0)
+      			 current = velocidadeAlta;
+      	delay(1000);
+    		 if(digitalRead(8)==0)
+      		 	current = desligado;
+    		if(digitalRead(6)==0)
+       			current = velocidadeBaixa;
+    		if(digitalRead(7)==0)
+      			 current = velocidadeAlta;
+      	analogWrite(9, 0);
+    		if(digitalRead(8)==0)
+      		 	current = desligado;
+    		if(digitalRead(6)==0)
+       			current = velocidadeBaixa;
+    		if(digitalRead(7)==0)
+      			 current = velocidadeAlta;
+      	delay(1000);
+  			if(digitalRead(8)==0)
+       			current = desligado;
+    		if(digitalRead(6)==0)
+       			current = velocidadeBaixa;
+    		if(digitalRead(7)==0)
+       			current = velocidadeAlta;
+    break;
+    
+//=======================================================   
+    //estado de velocidade baixa 
+    case velocidadeBaixa:
+    analogWrite(9, 127);
+    Serial.println("Velocidade 50%");
+    if(digitalRead(5)==0)
+       current = pulsar;
+    if(digitalRead(8)==0)
+       current = desligado;
+    if(digitalRead(7)==0)
+       current = velocidadeAlta;
+    break;
+
+//=======================================================
+    // estado de velocidade alta (max)
+    case velocidadeAlta:
+    analogWrite(9, 255);    
+    Serial.println("velocidade 100%");
+    if(digitalRead(5)==0)
+       current = pulsar;
+    if(digitalRead(6)==0)
+       current = velocidadeBaixa;
+    if(digitalRead(8)==0)
+       current = desligado;
+    break;
+    
+  } // end switch
+} // end void loop()
