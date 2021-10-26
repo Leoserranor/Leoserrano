@@ -1,0 +1,192 @@
+#include <LedControl.h>  // Biblioteca que controla a matrix 8x8 LED                
+
+ 
+
+const int trigPin = 7;                   // Define pino 7 como Trig Pin
+
+const int echoPin = 8;                   // Define pino 8 como Echo Pin
+
+ 
+
+long duration;         // Definição da variavel duração                 
+
+int distance;          // Definição da variavel distancia                 
+
+ 
+
+int DIN = 12;          // Definição do pino 12 como   DIN                
+
+int CS =  10;          // Definição do pino 10 como   CS 
+                        
+int CLK = 11;          // Definição do pino 11 como   CLK                           
+ 
+
+LedControl lc=LedControl(DIN,CLK,CS,0);            
+                                                                                   
+
+void setup()
+
+{
+
+ pinMode(trigPin, OUTPUT);     // Define o pino  Trig como uma saida.                            
+
+ pinMode(echoPin, INPUT);      // Define o pino Echi como uma entrada.                            
+
+ Serial.begin(9600);           // Define a taxa de baud em 9600.                                   
+
+ lc.shutdown(0,false);         // Comando da biblioteca  LC definindo a matriz como desligada.                                 
+
+ digitalWrite(trigPin, LOW);   // Define o trig como desligado.                                                                           
+
+ lc.setIntensity(0,8);         // Define intensidade do led como 8. Range(0~14).                                   
+
+ lc.clearDisplay(0);           // Limpa o display LED .                                   
+
+ 
+
+}
+
+
+void loop()
+
+{
+
+
+digitalWrite(trigPin, HIGH);   // Ativa o trig.                               
+                                                                             
+delayMicroseconds(1000);       // Define do trig.
+
+digitalWrite(trigPin, LOW);    // Desativa o trig.                            
+
+
+duration = pulseIn(echoPin, HIGH); // Define como  ativo o pulso do sensor ultrasonico.
+
+distance= duration*0.034/2;   // Calculo usado para parametrizar o sensor.                               
+
+Serial.print("Distance: ");    // Imprime no monitor serial o texto "Distance:".                                     
+
+Serial.println(distance);  // Imprime no monitor serial o valor lido pelo sensor.    
+
+ 
+
+if(distance<=40)   // Se a distancia for menor ou igual a 40cm entra essa linha é ativada.                                                     
+
+{
+
+   lc.setRow(0,0,B11111111); // Ativa pela biblioteca a linha 0 usando binario sendo nivel logico 1 Leds ativos.
+
+   delay(30);  //Delay de 30 milisegundos                                                       
+
+ 
+
+  } 
+
+if(distance<=35)   // Se a distancia for menor ou igual a 35cm entra essa linha é ativada.                                                      
+
+{
+
+   lc.setRow(0,1,B11111111); // Ativa pela biblioteca a linha 1 usando binario sendo nivel logico 1 Leds ativos.
+
+   delay(30);   //Delay de 30 milisegundos                                                      
+
+ 
+
+  } 
+
+if(distance<=30)  // Se a distancia for menor ou igual a 30cm entra essa linha é ativada.                                                       
+
+{
+
+   lc.setRow(0,2,B11111111); // Ativa pela biblioteca a linha 2 usando binario sendo nivel logico 1 Leds ativos.
+
+   delay(30); //Delay de 30 milisegundos                                                        
+
+ 
+
+  }   
+
+if(distance<=25)  // Se a distancia for menor ou igual a 25cm entra essa linha é ativada.                                                       
+
+{
+
+   lc.setRow(0,3,B11111111); // Ativa pela biblioteca a linha 3 usando binario sendo nivel logico 1 Leds ativos.
+
+   delay(30);  //Delay de 30 milisegundos                                                       
+
+ 
+
+  }  
+if(distance<=20)   // Se a distancia for menor ou igual a 20cm entra essa linha é ativada.                                                      
+
+{
+
+   lc.setRow(0,4,B11111111); // Ativa pela biblioteca a linha 4 usando binario sendo nivel logico 1 Leds ativos.
+
+   delay(30);  //Delay de 30 milisegundos                                                      
+
+ 
+
+  }
+
+if(distance<=15)  // Se a distancia for menor ou igual a 15cm entra essa linha é ativada.                                                       
+
+{
+
+   lc.setRow(0,5,B11111111); // Ativa pela biblioteca a linha 5 usando binario sendo nivel logico 1 Leds ativos.
+
+   delay(30); //Delay de 30 milisegundos                                                       
+
+ 
+
+  }
+
+if(distance<=10)  // Se a distancia for menor ou igual a 10cm entra essa linha é ativada.                                                      
+
+{
+
+   lc.setRow(0,6,B11111111); // Ativa pela biblioteca a linha 6 usando binario sendo nivel logico 1 Leds ativos.
+
+   delay(30);  //Delay de 30 milisegundos                                                       
+
+if(distance<=5)   // Se a distancia for menor ou igual a 5cm entra essa linha é ativada.                                                      
+
+{
+
+   lc.setRow(0,7,B11111111); // Ativa pela biblioteca a linha 7 usando binario sendo nivel logico 1 Leds ativos.
+
+   delay(30);   //Delay de 30 milisegundos                                                     
+
+ 
+
+  }  
+
+  }    
+  else
+
+  {
+
+    lc.clearDisplay(0);                                        
+
+    delay(30);  //Delay de 30 milisegundos                                                     
+
+    }
+
+}
+
+ 
+
+void printByte(byte character [])                         
+
+{
+
+  int i = 0;  // Define variavel i como zero.                                                         
+
+  for(i=0;i<8;i++)   // aumenta de forma crescente da linha 0 a 7.                                              
+
+  {
+
+    lc.setRow(0,i,character[i]); // Define como ativa a linha do laço For.                            
+
+  }
+
+}
